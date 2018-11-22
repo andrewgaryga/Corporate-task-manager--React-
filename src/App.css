@@ -1,0 +1,280 @@
+:root {
+  --secondary-color: #1abc9b;
+  --secondary-color__light: rgba(26, 188, 155, 0.18);
+  --support-color: #e74c3c;
+  --support-color__light: rgba(231, 76, 60, 0.18);
+  --gap_gorizontal: 3.5rem;
+  --gap_vertical: 2.5rem;
+  --element-shadow: 0.25em 0.25em 0.5em rgba(0,0,0,.015);
+}
+
+@import url('https://unpkg.com/normalize.css@8.0.1/normalize.css');
+@import url('https://use.fontawesome.com/releases/v5.5.0/css/all.css');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+
+/* 
+    Table of contents:
+
+    -Normalize;
+    -Utility classes;
+    -Buttons;
+    -Main styling:
+        -Search form section;
+        -Todo items section;
+        -Sidebar section:
+            -New Todo Item Form;
+        -Footer.
+*/
+
+
+/* Normalize */
+html {
+  font-size: 16px;
+}
+
+body {
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  height: 100vh;
+  color: #424244;
+  background-color: #f9f9fb;
+  padding: 0;
+  margin: 0;
+}
+
+#root {
+  height: 100%;
+}
+
+h5 {
+  margin-top: 0;
+  font-size: 1.25em;
+}
+
+h6 {
+  font-weight: normal;
+  margin-top: 0;
+  font-size: 1rem;
+}
+
+/* Utility classes */
+.text-small {
+  font-size: 90%;
+}
+
+.highlighted {
+  background: var(--secondary-color__light);
+}
+
+/* Buttons*/
+button {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  padding-right: 1.7rem;
+  display: inline-block;
+  font-weight: 700;
+  -webkit-appearance: button;
+  cursor: pointer;
+  color: #1a1a1b;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+button:focus, .search:focus, .form-styled input:focus, .form-styled textarea:focus {
+   outline: none
+}
+
+button:hover {
+  color: var(--secondary-color);
+}
+
+button::after {
+  font-family: "Font Awesome 5 Free"; 
+  position: absolute;
+  right: .5rem;
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+  text-transform: none;
+}
+
+button:hover::after {
+  color: var(--secondary-color);
+  right: .3rem;
+}
+
+.btn-complete::after {
+  content: '\f00c';
+}
+
+.btn-uncomplete::after {
+  content: '\f00d';
+}
+
+.btn-remove::after {
+  content: '\f2ed';
+}
+
+/* 
+  Main styling
+*/
+.container {
+  display: grid;
+  height: 100%;
+  grid-template-areas: "content sidebar"
+                      "footer  footer";
+  grid-template-columns: calc(70% - var(--gap_vertical) / 2) calc(30% - var(--gap_vertical) / 2);
+  grid-template-rows: 1fr auto;
+  grid-gap: var(--gap_vertical);
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1em;
+}
+
+/* Search form section */
+form, .form {    
+  display: flex;
+}
+
+.form-search {
+  grid-column: 1 / 4;
+  margin-top: 2rem;
+  justify-content: center;
+}
+
+.search {
+  border: 0;
+  margin-left: .5rem;
+  border-bottom: 1px solid black;
+  background: transparent;
+}
+
+.search::before {
+  font-family: "Font Awesome 5 Free"; 
+  margin-right: .5em;
+  content: '\f002';
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Todo items section */
+.card-container {
+  grid-area: content;
+  display: grid;
+  grid-auto-rows: min-content;
+  grid-gap: var(--gap_vertical);
+  grid-template-columns: repeat(3,1fr);
+  margin-bottom: var(--gap_gorizontal);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  box-shadow: var(--element-shadow);
+  background: white linear-gradient(135deg, var(--secondary-color__light) 10px, rgb(255, 255, 255) 0);
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+.card.completed {
+   background: rgba(255, 255, 255, 0.6);
+   box-shadow: 0.25em 0.25em 0.5em rgba(0,0,0,.0);
+}
+
+.completed .card-body {
+  text-decoration: line-through;
+}
+
+.card-author {
+  color: #898d93;
+  margin-bottom: .5rem;
+}
+
+.date::before {
+  margin-right: .5rem;
+  content: '\2012';
+}
+
+.card-body {
+  margin-bottom: .75rem;
+}
+
+/* Sidebar section */
+aside {
+  grid-area: sidebar;
+  align-self: center;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  padding: 10px;
+  border-left: 1px dotted lightgrey;
+}
+
+/* New Todo Item Form*/
+.form-styled {
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.6);
+  flex: 0 1 17rem;
+  padding: 2rem 1.5rem;
+  box-shadow: 0.25em 0.25em 0.5em rgba(0,0,0,.0);
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+.form-styled:hover {
+  background-color: white;
+  box-shadow: var(--element-shadow);
+}
+
+.form-styled input, .form-styled textarea {
+  border: 0;
+  border-bottom: 1px solid #e0e0e2;
+  margin-bottom: 1rem;
+  background: transparent;
+}
+
+
+.form-styled button {
+  align-self: flex-start;
+  border: 1px solid rgba(100, 66, 255, 0.18);
+  padding: 5px 10px;
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+.form-styled button:hover {
+  color: black;
+  border: 1px solid black;
+}
+
+.form-styled button.disabled {
+  color: lightgrey;
+  border: 1px solid lightgrey;
+  pointer-events: none;
+}
+
+.form-header {
+  font-weight: 700;
+  margin-bottom: 1.5em;
+}
+
+/* Input validation */
+.form-styled:hover input:invalid, .form-styled:hover textarea:invalid {
+  border-bottom: 1px solid var(--support-color__light);
+}
+.form-styled:hover input:valid, .form-styled:hover textarea:valid {
+  border-bottom: 1px solid var(--secondary-color__light);
+}
+
+/* Footer */
+footer {
+  grid-area: footer;
+  display: flex;
+  justify-content: center;
+  padding-top: calc(var(--gap_vertical) / 2);
+  padding-bottom: calc(var(--gap_vertical) / 2);
+  background-color: whitesmoke;
+}
+
+
+
