@@ -4,6 +4,7 @@ import TodoItemsList from "./components/TodoItemsList";
 import TodoInput from "./components/TodoInput";
 import TodoSearch from "./components/TodoSearch";
 import "./App.css";
+const uuidv4 = require('uuid/v4');
 
 class App extends Component {
   constructor(props) {
@@ -48,8 +49,12 @@ class App extends Component {
   };
 
   handleAdd = e => {
-    let newKey = this.state.key;
-    newKey++;
+    e.preventDefault();
+    let newKey = uuidv4();
+    console.log(newKey);
+    console.log(this);
+    console.log(e);
+    // newKey++;
     this.setState({ isSubmitted: true, key: newKey });
     this.setState({
       todoItems: [
@@ -70,18 +75,18 @@ class App extends Component {
     });
   };
 
-  validateInput = () => {
-    if (this.state.name && this.state.surname && this.state.message) {
-      console.log('true');
-      return true;
-    }
-    console.log('false');
-    return false;
-  }
+  // validateInput = () => {
+  //   if (this.state.name && this.state.surname && this.state.message) {
+  //     console.log('true');
+  //     return true;
+  //   }
+  //   console.log('false');
+  //   return false;
+  // }
 
   getCurDate = () => {
     var today = new Date();
-    return today = `${(today.getDate() < 10) ? '0' + today.getDate() : today.getDate()}.${(today.getMonth() < 10) ? '0' + today.getMonth() : today.getMonth()}.${today.getFullYear()}`;
+    return `${(today.getDate() < 10) ? '0' + today.getDate() : today.getDate()}.${( today.getMonth() + 1 < 10) ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)}.${today.getFullYear()}`;
   }
 
   toggleComplete = index => {
@@ -110,6 +115,7 @@ class App extends Component {
         filterValue +=
           item.message[item.message.toUpperCase().indexOf(value.toUpperCase())];
       }
+      console.log(filterValue);
       if (!e.target.value) {
         item.textMatch = false;
         item.textMatchStart = "";
@@ -166,7 +172,6 @@ class App extends Component {
 
   render() {
     return (
-      <React.Fragment>
         <div className="container">
           <main className="card-container">
             <TodoSearch handleSearch={this.handleSearch} />
@@ -184,16 +189,15 @@ class App extends Component {
               surname={this.state.surname}
               message={this.state.mesage}
               handleChange={this.handleChange}
-              validateInput={this.validateInput}
+              // validateInput={this.validateInput}
               handleAdd={this.handleAdd}
             />
           </aside>
 
           <footer>
-            <div className="copyright">© 2018</div>
+            <div className="copyright">&copy; 2018</div>
           </footer>
         </div>  
-      </React.Fragment>
     );
   }
 }

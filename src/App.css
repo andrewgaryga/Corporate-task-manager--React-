@@ -1,6 +1,8 @@
 :root {
   --secondary-color: #1abc9b;
   --secondary-color__light: rgba(26, 188, 155, 0.18);
+  --support-color: #e74c3c;
+  --support-color__light: rgba(231, 76, 60, 0.18);
   --gap_gorizontal: 3.5rem;
   --gap_vertical: 2.5rem;
   --element-shadow: 0.25em 0.25em 0.5em rgba(0,0,0,.015);
@@ -130,7 +132,7 @@ button:hover::after {
 }
 
 /* Search form section */
-.form-group {    
+form, .form {    
   display: flex;
 }
 
@@ -211,9 +213,16 @@ aside {
 /* New Todo Item Form*/
 .form-styled {
   flex-direction: column;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.6);
   flex: 0 1 17rem;
   padding: 2rem 1.5rem;
+  box-shadow: 0.25em 0.25em 0.5em rgba(0,0,0,.0);
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+.form-styled:hover {
+  background-color: white;
   box-shadow: var(--element-shadow);
 }
 
@@ -247,6 +256,14 @@ aside {
 .form-header {
   font-weight: 700;
   margin-bottom: 1.5em;
+}
+
+/* Input validation */
+.form-styled:hover input:invalid, .form-styled:hover textarea:invalid {
+  border-bottom: 1px solid var(--support-color__light);
+}
+.form-styled:hover input:valid, .form-styled:hover textarea:valid {
+  border-bottom: 1px solid var(--secondary-color__light);
 }
 
 /* Footer */

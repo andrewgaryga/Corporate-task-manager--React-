@@ -3,7 +3,8 @@ import React from "react";
 function TodoItem(props) {
   if (!props.display) {
     return null;
-  } else if (props.textMatch) {
+  } 
+  if (props.textMatch) {
     return (
       <article className={props.isCompleted ? "card completed" : "card"}>
         <h6 className="card-author text-small">
@@ -15,7 +16,7 @@ function TodoItem(props) {
 
         <div className="card-footer">
           <button
-            className={props.isCompleted ? "text-small btn-complete" : "text-small btn-uncomplete"}
+            className={props.isCompleted ? "text-small btn-uncomplete" : "text-small btn-complete"}
             onClick={() => { props.handleToggleComplete(); }}
           >
             {props.isCompleted ? "Uncomplete" : "Complete"}
@@ -41,7 +42,7 @@ function TodoItem(props) {
 
         <div className="card-footer">
           <button
-            className={props.isCompleted ? "text-small btn-complete" : "text-small btn-uncomplete"}
+            className={props.isCompleted ? "text-small btn-uncomplete" : "text-small btn-complete"}
             onClick={() => { props.handleToggleComplete(); }}
           >
             {props.isCompleted ? "Uncomplete" : "Complete"}
