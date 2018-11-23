@@ -1,18 +1,34 @@
-import React from "react";
+import React, { Component } from "react";
 
-function TodoInput(props) {
-  return (
-    <form className="form-styled">
-      <div className="form-group">
-        <h5 className="form-header">Add new item</h5>
-        <input name="name" type="text" placeholder="Name" value={props.name} onChange={props.handleChange} required/>
-        <input name="surname" type="text" placeholder="Surname" value={props.surname} onChange={props.handleChange} required/>
-        <textarea name="message" id="" cols="30" rows="3" placeholder="Message" value={props.message} onChange={props.handleChange} required></textarea>
-        <button onClick={props.handleAdd}>Add</button>
-        {/* <button type="button" onClick={props.handleAdd} className={props.validateInput() ? '' : 'disabled'}>Add</button>   */}
-      </div>
-    </form> 
-  );
+class TodoInput extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      surname: "",
+      message: "",
+    }
+  }
+  handleChange = e => {
+    this.setState({ [e.target.name]: e.target.value })
+  };
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.handleAdd(this.state.name, this.state.surname, this.state.message);
+  };
+  render() {
+    return (
+      <form className="form-styled" onSubmit={this.handleSubmit} id={this.props.id}>
+        <div className="form-group">
+          <h5 className="form-header">Add new item</h5>
+          <input name="name" type="text" placeholder="Name" value={this.state.name} onChange={this.handleChange} required/>
+          <input name="surname" type="text" placeholder="Surname" value={this.state.surname} onChange={this.handleChange} required/>
+          <textarea name="message" id="" cols="30" rows="3" placeholder="Message" value={this.state.message} onChange={this.handleChange} required></textarea>
+          <button>Add</button>
+        </div>
+      </form> 
+    )
+  }
 }
 
 export default TodoInput;

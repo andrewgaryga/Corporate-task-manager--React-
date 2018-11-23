@@ -1,203 +1,163 @@
 import React, { Component } from "react";
 
-import TodoItemsList from "./components/TodoItemsList";
+import TodoList from "./components/TodoList";
 import TodoInput from "./components/TodoInput";
-import TodoSearch from "./components/TodoSearch";
+import Switch from "./components/Switch";
+import Counter from "./components/Counter";
 import "./App.css";
-const uuidv4 = require('uuid/v4');
+import uuidv4 from "uuid/v4";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      surname: "",
-      message: "",
-      isSubmitted: false,
-      key: 2,
+      typeOfState: "local",
+      cur: 0,
       todoItems: [
         {
           name: "Andrew",
-          surname: "anime",
-          message: "Hello World!",
-          date: '12.10.2018',
-          key: 1,
+          surname: "Ivanov",
+          message: "Refactor main code",
+          date: "11.10.2018",
+          id: 1,
           isCompleted: false,
-          display: true,
-          textMatchStart: "",
-          textMatch: false,
-          textMatchEnd: ""
+          display: true
+        },
+        {
+          name: "Fedor",
+          surname: "Andreev",
+          message: "Draw new logo",
+          date: "10.10.2018",
+          id: 2,
+          isCompleted: false,
+          display: true
         },
         {
           name: "Yura",
-          surname: "notanime",
-          message: "Hello World!",
-          date: '12.10.2018',
-          key: 2,
+          surname: "Fedorov",
+          message: "Fix the coffee machine",
+          date: "12.10.2018",
+          id: 3,
+          isCompleted: false,
+          display: true
+        },
+        {
+          name: "Vova",
+          surname: "Danilov",
+          message: "Perform code review",
+          date: "13.10.2018",
+          id: 4,
           isCompleted: true,
-          display: true,
-          textMatchStart: "",
-          textMatch: false,
-          textMatchEnd: ""
+          display: true
         }
       ]
     };
   }
 
-  handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value })
-  };
-
-  handleAdd = e => {
-    e.preventDefault();
+  handleAdd = (name, surname, message) => {
     let newKey = uuidv4();
-    console.log(newKey);
-    console.log(this);
-    console.log(e);
-    // newKey++;
-    this.setState({ isSubmitted: true, key: newKey });
     this.setState({
       todoItems: [
         {
-          name: this.state.name,
-          surname: this.state.surname,
-          message: this.state.message,
+          name: name,
+          surname: surname,
+          message: message,
           date: this.getCurDate(),
-          key: newKey,
+          id: newKey,
           isCompleted: false,
-          display: true,
-          textMatchStart: "",
-          textMatch: false,
-          textMatchEnd: ""
+          display: true
         },
         ...this.state.todoItems
       ]
     });
   };
 
-  // validateInput = () => {
-  //   if (this.state.name && this.state.surname && this.state.message) {
-  //     console.log('true');
-  //     return true;
-  //   }
-  //   console.log('false');
-  //   return false;
-  // }
-
   getCurDate = () => {
     var today = new Date();
-    return `${(today.getDate() < 10) ? '0' + today.getDate() : today.getDate()}.${( today.getMonth() + 1 < 10) ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)}.${today.getFullYear()}`;
-  }
+    return `${today.getDate() < 10 ? "0" + today.getDate() : today.getDate()}.${today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1}.${today.getFullYear()}`;
+  };
 
-  toggleComplete = index => {
-    let arrCopy = [...this.state.todoItems];
-    arrCopy[index].isCompleted = !arrCopy[index].isCompleted;
+  toggleComplete = id => {
+    let arrCopy = this.state.todoItems.map(item => {
+      if (item.id === id) {
+        item.isCompleted = !item.isCompleted;
+        return item;
+      }
+      return item;
+    });
     this.setState({
       todoItems: arrCopy
     });
   };
 
-  toggleDelete = (inputKey) => {
+  toggleDelete = inputKey => {
     let arrCopy = [...this.state.todoItems];
-    console.log(inputKey);
     this.setState({
-      todoItems: arrCopy.filter(
-        // cur => cur.name !== inputName && cur.surname !== inputSurname
-        cur => cur.key !== inputKey
-      )
+      todoItems: arrCopy.filter(cur => cur.id !== inputKey)
     });
   };
 
-  handleSearch = e => {
-    let arrCopy = this.state.todoItems.map(item => {
-      let filterValue = "";
-      for (let value of e.target.value) {
-        filterValue +=
-          item.message[item.message.toUpperCase().indexOf(value.toUpperCase())];
-      }
-      console.log(filterValue);
-      if (!e.target.value) {
-        item.textMatch = false;
-        item.textMatchStart = "";
-        item.textMatchEnd = "";
-        item.display = true;
-
-        return item;
-      } else if (
-        item.message.toUpperCase().indexOf(filterValue.toUpperCase()) > -1
-      ) {
-        item.textMatch = filterValue;
-        item.display = true;
-
-        return item;
-      } else {
-        item.display = false;
-        return item;
-      }
-    });
-
-    if (!e.target.value) {
+  handleTypeOfState = status => {
+    if (status) {
       this.setState({
-        todoItems: arrCopy
+        typeOfState: "global"
       });
     } else {
       this.setState({
-        todoItems: this.highlightTextMatch(arrCopy)
+        typeOfState: "local"
       });
     }
   };
 
-  highlightTextMatch = arr => {
-    let arrResult = [];
-    arrResult = arr.map(item => {
-      if (item.display && item.textMatch) {
-        let filterValue = item.textMatch.toUpperCase();
-        item.textMatchStart = item.message.slice(
-          0,
-          item.message.toUpperCase().indexOf(filterValue)
-        );
-        item.textMatchEnd = item.message.slice(
-          item.message.toUpperCase().indexOf(filterValue) +
-            item.textMatch.length,
-          item.message.length
-        );
-        return item;
-      } else {
-        return item;
-      }
-    });
-
-    return arrResult;
+  handleGlobalState = operator => {
+    if (operator === "+") {
+      this.setState({
+        cur: this.state.cur + 1
+      });
+    } else if (operator === "-") {
+      this.setState({
+        cur: this.state.cur - 1
+      });
+    } else {
+      console.log("Wrong operator passed from Counter component");
+    }
   };
 
   render() {
     return (
-        <div className="container">
-          <main className="card-container">
-            <TodoSearch handleSearch={this.handleSearch} />
-            <TodoItemsList
-              todoItems={this.state.todoItems}
-              handleDelete={(inputKey) => {
-                this.toggleDelete(inputKey);
-              }}
-              handleToggleComplete={this.toggleComplete}
+      <div className="container">
+        <main className="card-container">
+          <TodoList
+            todoItems={this.state.todoItems}
+            toggleComplete={this.toggleComplete}
+            toggleDelete={this.toggleDelete}
+          />
+        </main>
+        <aside className="sidebar">
+          <div style={{backgroundColor: "white", padding: "20px", marginBottom: "15px"}}
+          >
+            <Switch
+              typeOfState={this.state.typeOfState}
+              handleTypeOfState={this.handleTypeOfState}
             />
-          </main>
-          <aside className="sidebar">
-            <TodoInput
-              name={this.state.name}
-              surname={this.state.surname}
-              message={this.state.mesage}
-              handleChange={this.handleChange}
-              // validateInput={this.validateInput}
-              handleAdd={this.handleAdd}
+            <Counter
+              cur={this.state.cur}
+              typeOfState={this.state.typeOfState}
+              handleGlobalState={this.handleGlobalState}
             />
-          </aside>
+            <Counter
+              cur={this.state.cur}
+              typeOfState={this.state.typeOfState}
+              handleGlobalState={this.handleGlobalState}
+            />
+          </div>
+          <TodoInput handleAdd={this.handleAdd} id="myForm" />
+        </aside>
 
-          <footer>
-            <div className="copyright">&copy; 2018</div>
-          </footer>
-        </div>  
+        <footer>
+          <div className="copyright">&copy; 2018</div>
+        </footer>
+      </div>
     );
   }
 }
